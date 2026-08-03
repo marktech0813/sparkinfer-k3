@@ -67,8 +67,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           YUNWEI_API_KEY: ${{ secrets.YUNWEI_API_KEY }}
-          COPYCAT_LLM_PROVIDER: ${{ vars.COPYCAT_LLM_PROVIDER }}
-          COPYCAT_LLM_PROVIDER: openai
+          # Default to openai when the repo variable is unset. The previous form
+          # defined the key twice in one env: block, which GitHub rejects as an
+          # invalid workflow — the guard has not parsed since that second line landed.
+          COPYCAT_LLM_PROVIDER: ${{ vars.COPYCAT_LLM_PROVIDER || 'openai' }}
           COPYCAT_LLM_MODEL: gpt-4o-mini
           PR_NUM: ${{ github.event.pull_request.number }}
         run: |
